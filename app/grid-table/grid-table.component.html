@@ -1,0 +1,18 @@
+<div *ngIf="config.serialize" class="grid-serializer" (click)="serialize()">O</div>
+<ul class="grid-paginator">
+  <li *ngFor="let page of pageList" (click)="paginator = page; processData()">{{page+1}}</li>
+</ul>
+<div class="grid-container">
+  <div *ngFor="let col of totalColList" class="grid-column">
+    <ul *ngIf="colObj[col]">
+      <li class="grid-header">{{col}}</li>
+      <li *ngFor="let row of procData; let rowIdx = index">{{procData[rowIdx][col]}}</li>
+    </ul>
+  </div>
+</div>
+<ul class="grid-column-select">
+  <li *ngFor="let list of totalColList">
+    <input *ngIf="list != '#'" #check type="checkbox" name="columnSelect" [checked]="colObj[list]"  [id]="list" (click)="columnSelect(check)"/>
+    <span *ngIf="list != '#'">{{list}}</span>
+  </li>
+</ul>
