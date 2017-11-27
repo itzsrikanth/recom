@@ -1,5 +1,7 @@
 <div style="width:1110px">
   <grid-table [inData]="gridData" [config]="gridConfig">
-    <p>Hello world</p>
+    <ng-container *ngFor="let row of gridData; let idx = index">
+      <p [id]="idx">Hello world</p>
+    </ng-container>
   </grid-table>
 </div>

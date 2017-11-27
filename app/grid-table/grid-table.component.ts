@@ -13,13 +13,17 @@ export class GridTableComponent implements OnInit {
   @Input() config: Object;
   private paginator: Number = 0;
   private pageList: Array<Number>;
+  private residue: Number;
   private rowList: Array<Number>;
   private colList: Array<String>;
   private optionalList: Array<String> = [];
   private totalColList: Array<String>;
   private colObj: Object;
   private procData: Array<Object>;
+
   private serialState: Boolean;
+  private columnSelectState: Boolean = false;
+  private rowSelectState: Array<Boolean>;
 
   range(count: Number): Array<Number> {
     return new Array(count).fill(0).map((x, i) => i);
@@ -35,6 +39,7 @@ export class GridTableComponent implements OnInit {
     }
 
     this.pageList = this.range(this.config['pageCount']);
+    this.residue = this.inData.length % this.config['rowMax'];
     this.totalColList = Object.keys(this.inData[0]);
     this.colList = this.totalColList.slice(0, this.config['colMax']);
     this.rowList = this.range(this.config['rowMax']);
@@ -55,6 +60,7 @@ export class GridTableComponent implements OnInit {
     this.procData = this.inData.filter((elem, i) => {
       return this.paginator === Math.floor(i / this.config['rowMax']);
     });
+    this.rowSelectState = Array(this.procData.length).fill(false);
   }
 
   serialize(): void {

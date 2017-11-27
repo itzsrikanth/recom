@@ -1,23 +1,51 @@
+<!-- serialize rows -->
 <div *ngIf="config.serialize" class="grid-serializer" (click)="serialize()">O</div>
-<ul class="grid-paginator">
-  <li *ngFor="let page of pageList" (click)="paginator = page; processData()">{{page+1}}</li>
-</ul>
+<!-- pagination -->
+<div class="grid-pagination-holder">
+  <span>Viewing {{paginator * config.rowMax + 1}} - </span>
+  <span *ngIf="paginator < config.pageCount-1">{{paginator * config.rowMax + config.rowMax}}</span>
+  <span *ngIf="paginator == config.pageCount-1">{{paginator * config.rowMax + residue}}</span>
+  <span> of {{inData.length}}</span>
+  <ul class="grid-paginator">
+    <li *ngFor="let page of pageList" (click)="paginator = page; processData()">{{page+1}}</li>
+  </ul>
+</div>
+<!-- actual grid -->
 <table>
   <thead>
     <tr>
-      <th *ngFor="let col of totalColList">
-        <span *ngIf="colObj[col]">{{col}}</span>
+      <ng-container *ngFor="let col of totalColList">
+        <th *ngIf="colObj[col]">{{col}}</th>
+      </ng-container>
+      <!-- columns selector -->
+      <th *ngIf="config.optionalRow"  (click)="columnSelectState = !columnSelectState">
+        <div class="grid-column-ellipsis">
+          <i class="fa fa-ellipsis-v"></i>
+          <ul class="grid-column-select" *ngIf="columnSelectState">
+            <li *ngFor="let list of totalColList">
+              <ng-container *ngIf="list != '#'">
+                <input #check type="checkbox" name="columnSelect" [checked]="colObj[list]" [id]="list" (click)="columnSelect(check)" />
+                <span>{{list}}</span>
+              </ng-container>
+            </li>
+          </ul>
+        </div>
       </th>
     </tr>
   </thead>
   <tbody>
-    <ng-container *ngFor="let row of procData">
+    <ng-container *ngFor="let row of procData; let rowIdx = index">
       <tr>
         <td *ngFor="let col of totalColList">
           <span *ngIf="colObj[col]">{{row[col]}}</span>
         </td>
+        <!-- optional row ellipsis -->
+        <td  *ngIf="config.optionalRow" (click)="rowSelectState[rowIdx] = !rowSelectState[rowIdx]">
+          <i class="fa fa-ellipsis-h" ></i>
+        </td>
       </tr>
-      <tr *ngIf="config.optionalRow">
+      <!-- optional row -->
+      <tr *ngIf="config.optionalRow" [hidden]="!rowSelectState[rowIdx]">
         <td [attr.colspan]="totalColList.length">
           <div class="row flex-row" *ngIf="!config.optionalContent">
             <div *ngFor="let opt of optionalList" class="col-2 d-flex flex-column">
@@ -25,15 +53,19 @@
               <span>{{row[opt]}}</span>
             </div>
           </div>
-          <ng-content *ngIf="config.optionalContent"></ng-content>
+          <!--<ng-content *ngIf="config.optionalContent" select="[id=rowIdx]"></ng-content>-->
         </td>
       </tr>
     </ng-container>
   </tbody>
 </table>
-<ul class="grid-column-select">
-  <li *ngFor="let list of totalColList">
-    <input *ngIf="list != '#'" #check type="checkbox" name="columnSelect" [checked]="colObj[list]" [id]="list" (click)="columnSelect(check)" />
-    <span *ngIf="list != '#'">{{list}}</span>
-  </li>
-</ul>
+<!-- pagination -->
+<div class="grid-pagination-holder">
+  <span>Viewing {{paginator * config.rowMax + 1}} - </span>
+  <span *ngIf="paginator < config.pageCount-1">{{paginator * config.rowMax + config.rowMax}}</span>
+  <span *ngIf="paginator == config.pageCount-1">{{paginator * config.rowMax + residue}}</span>
+  <span> of {{inData.length}}</span>
+  <ul class="grid-paginator">
+    <li *ngFor="let page of pageList" (click)="paginator = page; processData()">{{page+1}}</li>
+  </ul>
+</div>

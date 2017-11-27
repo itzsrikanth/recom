@@ -7,14 +7,25 @@ ul {
   display: flex;
   flex-direction: row;
 }
-.grid-column {
-  display:flex;
-  flex-direction: column;
+table {
+  width: 100%;
+}
+th, td {
   flex-grow: 1;
 }
-.grid-header {
-  font-weight: bold;
-  border-bottom: 1px solid #4a4a4a;
+th {
+  text-transform: uppercase;
+}
+.grid-column-ellipsis {
+  position: relative;
+}
+.grid-column-select {
+  position: absolute;
+  top: 15px;
+}
+.grid-pagination-holder {
+  display: flex;
+  justify-content: flex-end;
 }
 .grid-paginator {
   display: flex;

@@ -12,7 +12,7 @@ export class AppComponent {
     colMax: 6,
     serialize: true,
     optionalRow: true,
-    optionalContent: true
+    optionalContent: false
   };
 
   gridData: Array<Object> = [
