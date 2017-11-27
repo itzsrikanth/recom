@@ -2,17 +2,38 @@
 <ul class="grid-paginator">
   <li *ngFor="let page of pageList" (click)="paginator = page; processData()">{{page+1}}</li>
 </ul>
-<div class="grid-container">
-  <div *ngFor="let col of totalColList" class="grid-column">
-    <ul *ngIf="colObj[col]">
-      <li class="grid-header">{{col}}</li>
-      <li *ngFor="let row of procData; let rowIdx = index">{{procData[rowIdx][col]}}</li>
-    </ul>
-  </div>
-</div>
+<table>
+  <thead>
+    <tr>
+      <th *ngFor="let col of totalColList">
+        <span *ngIf="colObj[col]">{{col}}</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let row of procData">
+      <tr>
+        <td *ngFor="let col of totalColList">
+          <span *ngIf="colObj[col]">{{row[col]}}</span>
+        </td>
+      </tr>
+      <tr *ngIf="config.optionalRow">
+        <td [attr.colspan]="totalColList.length">
+          <div class="row flex-row" *ngIf="!config.optionalContent">
+            <div *ngFor="let opt of optionalList" class="col-2 d-flex flex-column">
+              <span>{{opt}}</span>
+              <span>{{row[opt]}}</span>
+            </div>
+          </div>
+          <ng-content *ngIf="config.optionalContent"></ng-content>
+        </td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>
 <ul class="grid-column-select">
   <li *ngFor="let list of totalColList">
-    <input *ngIf="list != '#'" #check type="checkbox" name="columnSelect" [checked]="colObj[list]"  [id]="list" (click)="columnSelect(check)"/>
+    <input *ngIf="list != '#'" #check type="checkbox" name="columnSelect" [checked]="colObj[list]" [id]="list" (click)="columnSelect(check)" />
     <span *ngIf="list != '#'">{{list}}</span>
   </li>
 </ul>

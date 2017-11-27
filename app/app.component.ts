@@ -8,9 +8,11 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AppComponent {
   gridConfig: Object = {
-    rowMax: 14,
+    rowMax: 7,
     colMax: 6,
-    serialize: true
+    serialize: true,
+    optionalRow: true,
+    optionalContent: true
   };
 
   gridData: Array<Object> = [

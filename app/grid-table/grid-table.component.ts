@@ -15,6 +15,7 @@ export class GridTableComponent implements OnInit {
   private pageList: Array<Number>;
   private rowList: Array<Number>;
   private colList: Array<String>;
+  private optionalList: Array<String> = [];
   private totalColList: Array<String>;
   private colObj: Object;
   private procData: Array<Object>;
@@ -28,6 +29,10 @@ export class GridTableComponent implements OnInit {
     this.config['rowMax'] = this.config['rowMax'] ? this.config['rowMax'] : 10;
     this.config['colMax'] = this.config['colMax'] ? this.config['colMax'] : 6;
     this.config['pageCount'] = Math.ceil(this.inData.length / this.config['rowMax']);
+    this.serialState = this.config['serialize'] || false;
+    if (this.config['optionalRow'] === undefined) {
+      this.config['optionalRow'] = true;
+    }
 
     this.pageList = this.range(this.config['pageCount']);
     this.totalColList = Object.keys(this.inData[0]);
@@ -36,9 +41,14 @@ export class GridTableComponent implements OnInit {
     //this.colObj = this.inData[0];
     this.colObj = { ...this.inData[0] };
     for (let prop in this.colObj) {
-      this.colObj[prop] = this.colList.indexOf(prop) !== -1 ? true : false;
+      //this.colObj[prop] = this.colList.indexOf(prop) !== -1 ? true : false;
+      if (this.colList.indexOf(prop) !== -1) {
+        this.colObj[prop] = true;
+      } else {
+        this.colObj[prop] = false;
+        this.optionalList.push(prop);
+      }
     }
-    this.serialState = this.config['serialize'] || false;
   }
 
   processData(): void {
@@ -69,15 +79,21 @@ export class GridTableComponent implements OnInit {
   }
 
   columnSelect(elem): void {
-    this.colObj[elem.id] = elem.checked;  
+    this.colObj[elem.id] = elem.checked;
+    this.optionalList = [];
+    for (let col in this.colObj) {
+      if (!this.colObj[col]) {
+        this.optionalList.push(col);
+      }
+    }
   }
 
   constructor() { }
 
   ngOnInit() {
     this.init();
-    this.processData();
     this.serialize();
+    this.processData();
   }
 
 }
