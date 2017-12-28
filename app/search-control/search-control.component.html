@@ -1,0 +1,9 @@
+<label>{{ label }}</label>
+<ng-container [ngSwitch]="true">
+  <input *ngSwitchCase="type === 'text' || type === 'textarea' || type === 'email' || type === 'number' || type === 'date'" #ip [(ngModel)]="value" [type]="type" />
+
+</ng-container>
+
+<!-- add this to app.component -->
+<!--<search-control [formControl]="textValue" label="text value" [type]="'text'" required minlength="5"></search-control>-->
+<!--textValue = new FormControl('hello Godzilla');-->
